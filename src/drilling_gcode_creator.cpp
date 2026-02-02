@@ -1,6 +1,8 @@
-#include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <sstream>
+#include <cmath>
 #include "../include/drilling_gcode_creator.h"
 #include "../include/settings.h"
 #include "../include/gcode-file-manager.h"
@@ -33,17 +35,17 @@ int DrillingGcodeCreator::generateGcode (const string &path, const vector<HoleOb
 }
 
 void DrillingGcodeCreator::addHoleToGcode (vector<string>& gcode, const double x, const double y) {
-    gcode.push_back("G00 X"+ to_string(x)+ " Y" + to_string(y)+ ";");
+    gcode.push_back("G00 X"+ formatCoordinate(x)+ " Y" + formatCoordinate(y)+ ";");
     gcode.push_back("G00 Z1;");
-    gcode.push_back("G01 Z-" + to_string(Settings::holeDepth) + " F"+ to_string(Settings::spindleDrillingSpeed) + ";");
+    gcode.push_back("G01 Z-" + formatCoordinate(Settings::holeDepth) + " F"+ to_string(Settings::spindleDrillingSpeed) + ";");
     gcode.push_back("G01 Z1 F" + to_string(Settings::spindleDrillingSpeed) +";");
-    gcode.push_back("G00 Z" + to_string(Settings::spindleLiftHeight) +";");
+    gcode.push_back("G00 Z" + formatCoordinate(Settings::spindleLiftHeight) +";");
 }
 
 vector<std::string> DrillingGcodeCreator::getGCodeStart() {
     vector<string> gCodeStart;
     gCodeStart.push_back("G21 G90 G94;");
-    gCodeStart.push_back("G00 Z" + to_string(Settings::spindleLiftHeight) + ";");
+    gCodeStart.push_back("G00 Z" + formatCoordinate(Settings::spindleLiftHeight) + ";");
     gCodeStart.push_back("G00 X0 Y0;");
     gCodeStart.push_back("M03 S" + to_string(Settings::spindleRotationSpeed) + ";");
     return gCodeStart;
@@ -51,7 +53,7 @@ vector<std::string> DrillingGcodeCreator::getGCodeStart() {
 
 vector<std::string> DrillingGcodeCreator::getGCodeEnd() {
     vector<string> gCodeEnd;
-    gCodeEnd.push_back("G00 Z" + to_string(Settings::spindleLiftHeight) + ";");
+    gCodeEnd.push_back("G00 Z" + formatCoordinate(Settings::spindleLiftHeight) + ";");
     gCodeEnd.push_back("G00 X0 Y0;");
     gCodeEnd.push_back("M30;");
     return gCodeEnd;
@@ -60,4 +62,10 @@ vector<std::string> DrillingGcodeCreator::getGCodeEnd() {
 
 string DrillingGcodeCreator::generateFileName (const string &path, const float & holeDiameter) {
     return path+"/drilling_tool-" + to_string(holeDiameter) + "mm.gcode";
+}
+
+string DrillingGcodeCreator::formatCoordinate ( double coordinate) {
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(2) << coordinate;
+    return oss.str();
 }

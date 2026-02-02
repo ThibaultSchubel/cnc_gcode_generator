@@ -37,6 +37,6 @@ int GCodeFileManager::saveGcode (const vector<string>& gcode, const string &file
         return -1;
     }
 
-    std::cout << "Fichier G-code enregistré avec succès : " << fileName << std::endl;
+    std::cout << "GCode File saved: " << fileName << std::endl;
     return 0;
 }

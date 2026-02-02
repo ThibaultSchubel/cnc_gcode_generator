@@ -80,14 +80,12 @@ int DrlReader::readFile(const string &drlFilePath) {
             throw std::invalid_argument("Cannot extract tool diameter : " + cStr);
         }
 
-        // Verify if tool don't steal exist
+        // Verify the diemeter dont exist
         for (auto &pair : toolDiametersList) {
-            if (pair.first == toolNumber) {
-                pair.second = toolDiameter; // update parametter
+            if (pair.second == toolDiameter) {
                 return;
             }
         }
-
         // Add tool
         toolDiametersList.emplace_back(toolNumber, toolDiameter);
 }

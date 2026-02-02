@@ -23,4 +23,6 @@ class DrillingGcodeCreator
         static int generateGcode (const string &path, const vector<HoleObject>& holes, const float& diameterMin);
         static string generateFileName (const string &path, const float & holeDiameter);
 
+    static string formatCoordinate ( double coordinate);
+
 };

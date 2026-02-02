@@ -1,8 +1,8 @@
-#include "../include/settings.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include "../external/minIni.h"
+#include "../include/settings.h"
 
 using namespace std;
 using namespace std::filesystem;
@@ -18,16 +18,12 @@ string Settings::configDirectory = string(homeDir)+"/.cnc_gcode_generator";
 string Settings::configFile = configDirectory+"/config.ini";
 
 int Settings::init() {
-    cout << "Initialisation des paramètres..." << std::endl;
-
     if (checkOrCreateDirectory() != 0) {return -1;}
     if (checkOrCreateConfigFile() != 0) {return -1;}
-
     return 0;
 }
 
 int Settings::checkOrCreateConfigFile () {
-    cout << configFile << endl;
 
     if (exists(configFile)) {
         const char* configPath = configFile.c_str();
@@ -37,15 +33,6 @@ int Settings::checkOrCreateConfigFile () {
         spindleRotationSpeed = ini_getl("spindle", "spindle_rotation_speed", 10000, configPath);
         spindleDrillingSpeed = ini_getl("spindle", "spindle_drilling_speed", 50, configPath);
 
-        // Affiche les valeurs lues
-        std::cout << endl<< "loaded configuration:" << endl;
-        std::cout << "- Hole depth: " << holeDepth << "mm" <<  endl;
-        std::cout << "- Spindle lift height: " << spindleLiftHeight << "mm" << endl;
-        std::cout << "- Spindle rotation speed: " << spindleRotationSpeed << "rpm" << endl;
-        std::cout << "- Spindle drilling speed: " << spindleDrillingSpeed << "mm/s" << endl << endl;
-
-        return 0;
-
     } else {
         std::cout << endl<< "Cannot find config file" << endl;
 
@@ -54,7 +41,7 @@ int Settings::checkOrCreateConfigFile () {
 
         std::ofstream configOut(configFile);
         if (!configOut.is_open()) {
-            std::cerr << "Erreur : Impossible de créer le fichier de configuration : " << configFile << endl;
+            std::cerr << "Error : Cannot create a config file " << configFile << endl;
             return -1;
         }
 
@@ -66,8 +53,16 @@ int Settings::checkOrCreateConfigFile () {
         configOut.close();
 
         cout << "New config file created: " << configFile << endl << endl;
-        return 0;
     }
+
+    // Show used values
+    std::cout << endl<< "loaded configuration:" << endl;
+    std::cout << "- Hole depth: " << holeDepth << "mm" <<  endl;
+    std::cout << "- Spindle lift height: " << spindleLiftHeight << "mm" << endl;
+    std::cout << "- Spindle rotation speed: " << spindleRotationSpeed << "rpm" << endl;
+    std::cout << "- Spindle drilling speed: " << spindleDrillingSpeed << "mm/s" << endl << endl;
+    return 0;
+
 }
 
 int Settings::checkOrCreateDirectory() {
