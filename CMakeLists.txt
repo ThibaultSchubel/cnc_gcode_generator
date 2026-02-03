@@ -10,6 +10,7 @@ add_executable(cnc_gcode_generator
         src/drilling_manager.cpp
         src/drilling_gcode_creator.cpp
         src/gcode-file-manager.cpp
+        src/gbr_reader.cpp
         external/minIni.c
 )
 target_include_directories(cnc_gcode_generator PRIVATE

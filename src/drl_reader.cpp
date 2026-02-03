@@ -17,7 +17,7 @@ int DrlReader::readFile(const string &drlFilePath) {
 
 
     if (!file.is_open()) {
-        cerr << "Erreur : Impossible d'ouvrir le fichier DRL : " << drlFilePath << endl;
+        cerr << "Error : Cannot read file DRL: " << drlFilePath << endl;
         return -1;
     }
 
@@ -173,22 +173,22 @@ void DrlReader::pushHole(const string& drlLine, const int tool)
         }
     }
 
-    // Extrait la valeur de X
+    // Extract X value
     std::string xValueStr = drlLine.substr(xPos + 1, yPos - xPos - 1);
     double xValue;
     try {
         xValue = std::stod(xValueStr);
     } catch (const std::exception& e) {
-        throw std::invalid_argument("Erreur de conversion pour la valeur X : " + xValueStr);
+        throw std::invalid_argument("Cannot convert X value: " + xValueStr);
     }
 
-    // Extrait la valeur de Y
+    // Extract Y value
     std::string yValueStr = drlLine.substr(yPos + 1);
     double yValue;
     try {
         yValue = std::stod(yValueStr);
     } catch (const std::exception& e) {
-        throw std::invalid_argument("Erreur de conversion pour la valeur Y : " + yValueStr);
+        throw std::invalid_argument("Cannot convert Y value : " + yValueStr);
     }
 
 

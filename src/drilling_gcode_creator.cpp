@@ -37,23 +37,23 @@ int DrillingGcodeCreator::generateGcode (const string &path, const vector<HoleOb
 void DrillingGcodeCreator::addHoleToGcode (vector<string>& gcode, const double x, const double y) {
     gcode.push_back("G00 X"+ formatCoordinate(x)+ " Y" + formatCoordinate(y)+ ";");
     gcode.push_back("G00 Z1;");
-    gcode.push_back("G01 Z-" + formatCoordinate(Settings::holeDepth) + " F"+ to_string(Settings::spindleDrillingSpeed) + ";");
-    gcode.push_back("G01 Z1 F" + to_string(Settings::spindleDrillingSpeed) +";");
-    gcode.push_back("G00 Z" + formatCoordinate(Settings::spindleLiftHeight) +";");
+    gcode.push_back("G01 Z-" + formatCoordinate(Settings::drillHoleDepth) + " F"+ to_string(Settings::drillSpindleSpeed) + ";");
+    gcode.push_back("G01 Z1 F" + to_string(Settings::drillSpindleSpeed) +";");
+    gcode.push_back("G00 Z" + formatCoordinate(Settings::drillSpindleLiftHeight) +";");
 }
 
 vector<std::string> DrillingGcodeCreator::getGCodeStart() {
     vector<string> gCodeStart;
     gCodeStart.push_back("G21 G90 G94;");
-    gCodeStart.push_back("G00 Z" + formatCoordinate(Settings::spindleLiftHeight) + ";");
+    gCodeStart.push_back("G00 Z" + formatCoordinate(Settings::drillSpindleLiftHeight) + ";");
     gCodeStart.push_back("G00 X0 Y0;");
-    gCodeStart.push_back("M03 S" + to_string(Settings::spindleRotationSpeed) + ";");
+    gCodeStart.push_back("M03 S" + to_string(Settings::drillSpindleRotationSpeed) + ";");
     return gCodeStart;
 }
 
 vector<std::string> DrillingGcodeCreator::getGCodeEnd() {
     vector<string> gCodeEnd;
-    gCodeEnd.push_back("G00 Z" + formatCoordinate(Settings::spindleLiftHeight) + ";");
+    gCodeEnd.push_back("G00 Z" + formatCoordinate(Settings::drillSpindleLiftHeight) + ";");
     gCodeEnd.push_back("G00 X0 Y0;");
     gCodeEnd.push_back("M30;");
     return gCodeEnd;

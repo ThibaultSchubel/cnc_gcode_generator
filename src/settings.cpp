@@ -8,10 +8,17 @@ using namespace std;
 using namespace std::filesystem;
 
 // Initialisation des variables statiques
-float Settings::holeDepth = 3.0f;
-float Settings::spindleLiftHeight = 5.0f;
-int Settings::spindleRotationSpeed = 10000;
-int Settings::spindleDrillingSpeed = 50;
+float Settings::drillHoleDepth = 3.0f;
+float Settings::drillSpindleLiftHeight = 5.0f;
+int Settings::drillSpindleRotationSpeed = 10000;
+int Settings::drillSpindleSpeed = 50;
+
+float Settings::cutDepth = 2.0f;
+int Settings::cutPass = 3;
+float Settings::cutSpindleLiftHeight = 5.0f;
+int Settings::cutSpindleRotationSpeed= 10000;
+int Settings::cutSpindleZSpeed = 50;
+int Settings::cutFeedRate = 80;
 
 char* Settings::homeDir = getenv("HOME");
 string Settings::configDirectory = string(homeDir)+"/.cnc_gcode_generator";
@@ -28,10 +35,18 @@ int Settings::checkOrCreateConfigFile () {
     if (exists(configFile)) {
         const char* configPath = configFile.c_str();
 
-        holeDepth = static_cast<float>(ini_getf("spindle", "hole_depth", -3.0, configPath));
-        spindleLiftHeight = static_cast<float>(ini_getf("spindle", "spindle_lift_height", 5.0, configPath));
-        spindleRotationSpeed = ini_getl("spindle", "spindle_rotation_speed", 10000, configPath);
-        spindleDrillingSpeed = ini_getl("spindle", "spindle_drilling_speed", 50, configPath);
+        drillHoleDepth = static_cast<float>(ini_getf("drill_work", "hole_depth", drillHoleDepth, configPath));
+        drillSpindleLiftHeight = static_cast<float>(ini_getf("drill_work", "spindle_lift_height", drillSpindleLiftHeight, configPath));
+        drillSpindleRotationSpeed = static_cast<int>(ini_getl("drill_work", "spindle_rotation_speed", drillSpindleRotationSpeed, configPath));
+        drillSpindleSpeed = static_cast<int>(ini_getl("drill_work", "spindle_drilling_speed", drillSpindleSpeed, configPath));
+
+        cutDepth = static_cast<float>(ini_getf("cut_work", "cut_depth", cutDepth, configPath));
+        cutPass = static_cast<int>(ini_getf("cut_work", "cut_pass", cutPass, configPath));
+        cutSpindleLiftHeight = static_cast<float>(ini_getf("cut_work", "spindle_lift_height", cutSpindleLiftHeight, configPath));
+        cutSpindleRotationSpeed = static_cast<int>(ini_getf("cut_work", "spindle_rotation_speed", cutSpindleRotationSpeed, configPath));
+        cutSpindleZSpeed = static_cast<int>(ini_getf("cut_work", "spindle_z_speed", cutSpindleZSpeed, configPath));
+        cutFeedRate = static_cast<int>(ini_getf("cut_work", "feed_rate", cutFeedRate, configPath));
+
 
     } else {
         std::cout << endl<< "Cannot find config file" << endl;
@@ -45,22 +60,46 @@ int Settings::checkOrCreateConfigFile () {
             return -1;
         }
 
-        configOut << "[spindle]\n";
-        configOut << "hole_depth = " << to_string(holeDepth) <<"\n";
-        configOut << "spindle_lift_height = "<< to_string(spindleLiftHeight) <<"\n";
-        configOut << "spindle_rotation_speed = "<< to_string(spindleRotationSpeed) <<"\n";
-        configOut << "spindle_drilling_speed = "<< to_string(spindleDrillingSpeed) <<"\n";
+        configOut << "[drill_work]\n";
+        configOut << "hole_depth = " << to_string(drillHoleDepth) <<"\n";
+        configOut << "spindle_lift_height = "<< to_string(drillSpindleLiftHeight) <<"\n";
+        configOut << "spindle_rotation_speed = "<< to_string(drillSpindleRotationSpeed) <<"\n";
+        configOut << "spindle_drilling_speed = "<< to_string(drillSpindleSpeed) <<"\n";
+
+        configOut << "[cut_work]\n";
+        configOut << "cut_depth = " << to_string(cutDepth) <<"\n";
+        configOut << "cut_pass = " << to_string(cutPass) <<"\n";
+
+        configOut << "spindle_lift_height = "<< to_string(cutSpindleLiftHeight) <<"\n";
+        configOut << "spindle_rotation_speed = "<< to_string(cutSpindleRotationSpeed) <<"\n";
+        configOut << "spindle_z_speed = "<< to_string(cutSpindleZSpeed) <<"\n";
+        configOut << "feed_rate = "<< to_string(cutFeedRate) <<"\n";
+
+
         configOut.close();
 
         cout << "New config file created: " << configFile << endl << endl;
     }
 
     // Show used values
-    std::cout << endl<< "loaded configuration:" << endl;
-    std::cout << "- Hole depth: " << holeDepth << "mm" <<  endl;
-    std::cout << "- Spindle lift height: " << spindleLiftHeight << "mm" << endl;
-    std::cout << "- Spindle rotation speed: " << spindleRotationSpeed << "rpm" << endl;
-    std::cout << "- Spindle drilling speed: " << spindleDrillingSpeed << "mm/s" << endl << endl;
+    std::cout << "Drill work" << endl;
+    std::cout << "-------------------" << endl;
+
+    std::cout << "- Hole depth: " << drillHoleDepth << "mm" <<  endl;
+    std::cout << "- Spindle lift height: " << drillSpindleLiftHeight << "mm" << endl;
+    std::cout << "- Spindle rotation speed: " << drillSpindleRotationSpeed << "rpm" << endl;
+    std::cout << "- Spindle drilling speed: " << drillSpindleSpeed << "mm/s" << endl << endl;
+
+    std::cout << "Cut work" << endl;
+    std::cout << "-------------------" << endl;
+
+    std::cout << "- Cut depth: " << cutDepth << "mm" <<  endl;
+    std::cout << "- Cut pass: " << cutPass <<  endl;
+    std::cout << "- Spindle lift height: " << cutSpindleLiftHeight << "mm" << endl;
+    std::cout << "- Spindle rotation speed: " << cutSpindleRotationSpeed << "rpm" << endl;
+    std::cout << "- Spindle Z axe speed: " << cutSpindleZSpeed << "mm/s" << endl;
+    std::cout << "- Spindle feed rate: " << cutFeedRate << "mm/s" << endl << endl;
+
     return 0;
 
 }
