@@ -2,7 +2,6 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
-#include <cmath>
 #include "../include/drilling_gcode_creator.h"
 #include "../include/settings.h"
 #include "../include/gcode-file-manager.h"

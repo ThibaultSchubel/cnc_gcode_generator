@@ -21,7 +21,7 @@ vector<Vertex>* OutlineManager::readFile(const vector<Vertex> &polygon) {
     for (auto v : results[0].vertexes() ) {
         outline.push_back( {v.x(),  v.y()});
     }
-
+    outline.push_back( {results[0].vertexes()[0].x(),  results[0].vertexes()[0].y()});
     return &outline;
 
 }
