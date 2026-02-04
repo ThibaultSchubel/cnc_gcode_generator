@@ -19,7 +19,7 @@ int GbrReader::readFile(const string &gbrFilePath) {
     while (std::getline(file, line)) {
 
         // If line begin with 'X' ou 'x'
-        if (line.find('X') != std::string::npos || line.find('x') != std::string::npos) {
+        if (line[0] == 'x' ||line[0] == 'X') {
             const int pushVertexResp = pushVertex(line);
             if (pushVertexResp != 0) {
                 return pushVertexResp;

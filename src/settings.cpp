@@ -19,6 +19,7 @@ float Settings::cutSpindleLiftHeight = 5.0f;
 int Settings::cutSpindleRotationSpeed= 10000;
 int Settings::cutSpindleZSpeed = 50;
 int Settings::cutFeedRate = 80;
+float Settings::toolDiameter = 3.0f;
 
 char* Settings::homeDir = getenv("HOME");
 string Settings::configDirectory = string(homeDir)+"/.cnc_gcode_generator";
@@ -46,6 +47,7 @@ int Settings::checkOrCreateConfigFile () {
         cutSpindleRotationSpeed = static_cast<int>(ini_getf("cut_work", "spindle_rotation_speed", cutSpindleRotationSpeed, configPath));
         cutSpindleZSpeed = static_cast<int>(ini_getf("cut_work", "spindle_z_speed", cutSpindleZSpeed, configPath));
         cutFeedRate = static_cast<int>(ini_getf("cut_work", "feed_rate", cutFeedRate, configPath));
+        toolDiameter = static_cast<float>(ini_getf("cut_work", "tool_diameter", toolDiameter, configPath));
 
 
     } else {
@@ -74,7 +76,7 @@ int Settings::checkOrCreateConfigFile () {
         configOut << "spindle_rotation_speed = "<< to_string(cutSpindleRotationSpeed) <<"\n";
         configOut << "spindle_z_speed = "<< to_string(cutSpindleZSpeed) <<"\n";
         configOut << "feed_rate = "<< to_string(cutFeedRate) <<"\n";
-
+        configOut << "tool_diameter = "<< to_string(toolDiameter) <<"\n";
 
         configOut.close();
 
@@ -98,7 +100,8 @@ int Settings::checkOrCreateConfigFile () {
     std::cout << "- Spindle lift height: " << cutSpindleLiftHeight << "mm" << endl;
     std::cout << "- Spindle rotation speed: " << cutSpindleRotationSpeed << "rpm" << endl;
     std::cout << "- Spindle Z axe speed: " << cutSpindleZSpeed << "mm/s" << endl;
-    std::cout << "- Spindle feed rate: " << cutFeedRate << "mm/s" << endl << endl;
+    std::cout << "- Spindle feed rate: " << cutFeedRate << "mm/s" << endl;
+    std::cout << "- Tool diameter: " << toolDiameter << "mm" << endl << endl;
 
     return 0;
 

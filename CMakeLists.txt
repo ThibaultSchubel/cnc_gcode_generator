@@ -7,14 +7,19 @@ add_executable(cnc_gcode_generator
         src/main.cpp
         src/settings.cpp
         src/drl_reader.cpp
+        src/outline_manager.cpp
         src/drilling_manager.cpp
         src/drilling_gcode_creator.cpp
         src/gcode-file-manager.cpp
         src/gbr_reader.cpp
+        src/cutting_gcode_creator.cpp
+
         external/minIni.c
+        external/cavaliercontours/polylineoffset.hpp
 )
 target_include_directories(cnc_gcode_generator PRIVATE
         include
         external
+        external/cavaliercontours
 )
 

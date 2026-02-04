@@ -7,7 +7,9 @@
 #include "../include/gcode-file-manager.h"
 
 /*--Cut files generation--*/
+#include "cutting_gcode_creator.h"
 #include "../include/gbr_reader.h"
+#include "outline_manager.h"
 
 
 using namespace std;
@@ -23,6 +25,7 @@ int main() {
     Settings::init ();
 
     /*--Drill files generation--*/
+    /*
     cout << "Do you want to create files for drills (Y/n): ";
     getline(cin, answer);
 
@@ -36,7 +39,7 @@ int main() {
         DrillingGcodeCreator::generateGCodeFiles(GCodeFileManager::extractDirectoryPath(drlFilePath), DrlReader::holes, DrlReader::toolDiametersList);
         cout << "--------------------------" << endl << endl;
     }
-
+*/
     /*--Cut files generation--*/
     cout << "Do you want to create files for edges cut(Y/n): ";
     getline(cin, answer);
@@ -48,6 +51,7 @@ int main() {
         cout << endl;
 
         GbrReader::readFile(gbrFilePath);
+        CuttingGcodeCreator::generateCuttingGCodeFiles (GCodeFileManager::extractDirectoryPath(gbrFilePath), *OutlineManager::readFile(GbrReader::polygon));
 
         cout << "--------------------------" << endl << endl;
     }

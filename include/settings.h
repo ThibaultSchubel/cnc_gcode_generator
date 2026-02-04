@@ -20,6 +20,7 @@ public:
     static int cutSpindleRotationSpeed;
     static int cutSpindleZSpeed;
     static int cutFeedRate;
+    static float toolDiameter;
 
 
     static int init();
